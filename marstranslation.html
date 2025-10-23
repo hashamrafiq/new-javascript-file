@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.2/video-js.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.10.2/video.min.js"></script>
+</head>
+<style>
+    .video-localization {
+        background-color: #1d1d1d
+    }
+
+    .video-localization:before {
+        content: url("https://s3.amazonaws.com/marstranslation.aws.bucket/cms/default/0034/63/6222194a7d2cb129cfa283a2f51cf7e53f26e547.svg");
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    .video-localization:after {
+        content: url("https://s3.amazonaws.com/marstranslation.aws.bucket/cms/default/0034/63/163cc4f1169d3e567ebc9a412d3d95ae9f0438a5.svg");
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+
+    .vjs-big-play-button {
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Make the big play button circular */
+    .video-js .vjs-big-play-button {
+        width: 70px;
+        /* size of the button */
+        height: 70px;
+        border-radius: 50%;
+        /* makes it a perfect circle */
+        background-color: rgb(255 255 255 / 50%);
+        /* semi-transparent black background */
+        border: 2px solid #1d1d1d;
+        /* white border around circle */
+        color: #fff;
+        font-size: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    /* Center the play icon inside */
+    .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+        font-size: 2rem;
+        line-height: 70px;
+        color: #1d1d1d;
+        /* centers the icon vertically */
+    }
+
+    .video-js .vjs-control-bar {
+        display: none !important;
+    }
+
+    video-js#video-ai {
+        border-radius: 25px;
+    }
+
+    .video-localization-process .process-card {
+        padding: 20px 20px 45px;
+        border-radius: 12px;
+        box-shadow: 0 14px 68px 0 rgba(16, 66, 97, .07);
+    }
+
+    .video-localization-process .process-card .logo {
+        z-index: 2;
+    }
+
+    .video-localization-process .process-card .logo::before {
+        content: "";
+        display: inline-block;
+        width: 27px;
+        height: 30px;
+        z-index: -1;
+        border-radius: 5px;
+        position: absolute;
+        top: 10px;
+        left: -5px;
+        box-shadow: -5.516px 4.31px 13px 0 rgba(186, 189, 197, .28);
+    }
+
+    .video-localization-process .process-card .title {
+        color: #484848;
+    }
+
+    .video-localization-process .process-card .about {
+        font-size: 14px;
+        color: #788390;
+    }
+
+    @media (min-width: 992px) {
+        .video-localization .nav.nav-pills {
+            margin-top: 30px;
+        }
+    }
+
+    .video-localization .tab-content .tab-pane {
+        background: url("https://s3.amazonaws.com/marstranslation.aws.bucket/cms/default/0034/62/d19075ef822e84237729af30ee1b498650b12a7c.webp") 0 0/cover no-repeat;
+        width: 425px;
+        height: 735px
+    }
+
+    .video-localization .tab-content .tab-pane>div {
+        width: 397px;
+        height: 717px;
+        overflow: hidden;
+        border-right: 22px
+    }
+
+    .video-localization .tab-content .tab-pane>div video {
+        border-radius: 22px
+    }
+
+    .video-localization .tab-content .tab-pane.active {
+        display: flex;
+        align-items: center
+    }
+
+    .video-localization .logo-wrap {
+        width: 44px;
+        height: 44px;
+        border-radius: 100%;
+        background: #424242
+    }
+
+    .video-localization .nav::before {
+        content: '';
+        width: 100%;
+        height: 1px;
+        position: absolute;
+        background: #424242;
+        z-index: -1;
+        top: 22px
+    }
+
+    .video-localization span {
+        font-weight: 600;
+        font-size: 20px;
+        margin: 18px 0
+    }
+
+    .video-localization button.nav-link {
+        background: #2d2d2d;
+        border: 1px solid #424242;
+        border-radius: 50px;
+        font-weight: 400;
+        font-size: 12px;
+        margin-bottom: 14px;
+        padding: 7px 8px;
+    }
+
+    .nav-pills .nav-link.active,
+    .video-localization button.nav-link:hover {
+        background: #ff5100;
+        font-weight: 600;
+        border-color: #ff5100
+    }
+
+    .ai-videos:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: -13px;
+        transform: translatey(-50%);
+        width: 1px;
+        height: 690px;
+        background: #474747
+    }
+
+    @media screen and (max-width: 1199px) and (min-width: 992px) {
+        .video-localization .tab-content .tab-pane {
+            background: url("https://s3.amazonaws.com/marstranslation.aws.bucket/cms/default/0034/62/e73428137e5e67e71fb9ecf3ba22f0b10812b104.webp") center no-repeat;
+            width: 348px;
+            height: 604px
+        }
+
+        .video-localization .tab-content .tab-pane>div {
+            width: 326px;
+            height: 588px
+        }
+
+        .movie-translate.media-translate {
+            position: relative;
+            z-index: 1
+        }
+
+        .video-localization .nav::before {
+            top: 18px
+        }
+
+        .video-localization .logo-wrap {
+            width: 36px;
+            height: 36px
+        }
+
+        .video-localization .logo-wrap img {
+            position: relative;
+            z-index: 1;
+            width: 18px;
+            height: 18px
+        }
+
+        .video-localization span {
+            font-size: 16px;
+            margin: 15px 0
+        }
+
+        .video-localization button.nav-link {
+            font-size: 10px
+        }
+    }
+
+    @media only screen and (max-width: 1199px) {
+
+        .video-localization:before,
+        .video-localization:after {
+            content: unset;
+        }
+    }
+
+    @media only screen and (max-width: 991px) {
+        .video-localization .ai-videos {
+            margin-bottom: 61px
+        }
+
+        .ai-videos:after {
+            content: "";
+            position: absolute;
+            top: unset;
+            right: unset;
+            left: 50%;
+            bottom: -30px;
+            transform: translatex(-50%);
+            height: 1px;
+            width: 484px
+        }
+
+    }
+
+    @media only screen and (max-width: 767px) {
+        .video_service::after {
+            display: none;
+        }
+
+        .video_service::before {
+            display: none;
+        }
+
+        .video-localization {
+            padding: 50px 0
+        }
+    }
+
+
+
+
+    @media only screen and (max-width: 575px) {
+        .video-localization .tab-content .tab-pane {
+            background: url("https://s3.amazonaws.com/marstranslation.aws.bucket/cms/default/0034/62/01a6b8677e2e95815f458382d6cde8a70534654b.webp") center no-repeat;
+            width: 289px;
+            height: 501px
+        }
+
+        .video-localization .tab-content .tab-pane>div {
+            width: 269px;
+            height: 493px
+        }
+
+        .movie-translate.media-translate {
+            position: relative;
+            z-index: 1
+        }
+
+        .video-localization button.nav-link {
+            margin-bottom: 5px;
+            font-size: 10px;
+            min-width: 70px
+        }
+
+        .video-localization .logo-wrap {
+            width: 29px;
+            height: 29px
+        }
+
+        .video-localization .logo-wrap img {
+            position: relative;
+            z-index: 1;
+            width: 18px;
+            height: 18px
+        }
+
+        .video-localization span {
+            font-size: 14px !important;
+            margin: 15px 0
+        }
+
+        .ai-videos:after {
+            width: 220px
+        }
+
+        .video-localization .nav::before {
+            width: 60px;
+            top: 13px;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+    }
+</style>
+
+<body>
+    <section class="video-localization position-relative py-5">
+        <div class="container position-relative py-lg-5" style="z-index: 1">
+            <div class="row mb-lg-5 mb-4 pb-2 pb-lg-0">
+                <div class="col-lg-12">
+                    <h2 class="text-white text-center mb-0">Video Localization in Action</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="ai-videos position-relative">
+                        <div
+                            class="d-sm-flex align-items-lg-start align-items-center justify-content-lg-start justify-content-center">
+                            <div aria-orientation="vertical"
+                                class="nav flex-column nav-pills me-sm-4 mb-sm-0 mb-4 text-center position-relative"
+                                id="v-pills-tab" role="tablist">
+                                <div class="logo-wrap d-flex align-items-center justify-content-center mx-auto"><img
+                                        alt="ai-logo" loading="lazy"
+                                        src="https://s3.amazonaws.com/marstranslation.aws.bucket/default/0034/61/562d9dbda0c0ea6e8168710dcb63c4eb5d5d3e98.svg" />
+                                </div>
+                                <span class="d-block mx-auto text-white">AI</span>
+
+                                <div class="nav d-flex flex-sm-column flex-wrap gap-sm-0 gap-1 ai-tab">
+                                    <button class="nav-link text-white px-sm-2 mb-3 active" type="button"
+                                        onclick="videoPlay(this,'ai','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/fd700b95adaf17ca29cf8dc59526fa68/manifest/video.m3u8')">
+                                        English
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3" type="button"
+                                        onclick="videoPlay(this,'ai','Japanese','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/ca17301ae7e5cc3a8da313c9f297b293/manifest/video.m3u8')">
+                                        Japanese
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3" type="button"
+                                        onclick="videoPlay(this,'ai','Korean','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/948b98572ee111140e2d48f2a9b2fb58/manifest/video.m3u8')">
+                                        Korean
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3" role="tab" type="button"
+                                        onclick="videoPlay(this,'ai','Vietnamese','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/8948388667a86a1d8b551db5fc5218e7/manifest/video.m3u8')">
+                                        Vietnamese
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3" role="tab" type="button"
+                                        onclick="videoPlay(this,'ai','Indonesian','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/455449a472a4e49fedf7965f8b379675/manifest/video.m3u8')">
+                                        Indonesian
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3" role="tab" type="button"
+                                        onclick="videoPlay(this,'ai','Spanish','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/f2be4981fdab0ce7ab8f690c6d6929a6/manifest/video.m3u8')">
+                                        Spanish
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3" role="tab" type="button"
+                                        onclick="videoPlay(this,'ai','Portuguese','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/e3ad44079edb495b84ebb27f398f67cb/manifest/video.m3u8')">
+                                        Portuguese
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 mb-sm-0" type="button"
+                                        onclick="videoPlay(this,'ai','Arabic','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/091426b8446d03b1add0368681a7b596/manifest/video.m3u8')">
+                                        Arabic
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-content d-sm-block d-flex justify-content-center" id="v-pills-tabContent">
+                                <div aria-labelledby="ai-english-tab" class="tab-pane fader show active" id="ai-english"
+                                    role="tabpanel">
+                                    <div class="mx-auto">
+                                        <video-js class="w-100 h-100 videoPlayer" id="video-ai" controls
+                                            title="Speech To Text-EN (AI+Human Transcription)" width="100%">
+                                            <source id="videoSource-ai" class="w-100 ai-video"
+                                                src="https://customer-y103wh2d9k09h4ie.cloudflarestream.com/fd700b95adaf17ca29cf8dc59526fa68/manifest/video.m3u8"
+                                                type="application/x-mpegURL" />
+                                        </video-js>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="human-videos">
+                        <div
+                            class="d-sm-flex align-items-lg-start align-items-center justify-content-lg-end justify-content-center">
+                            <div aria-orientation="vertical"
+                                class="nav flex-column nav-pills me-sm-4 mb-sm-0 mb-4 text-center position-relative"
+                                id="v-pills-tab" role="tablist">
+                                <div class="logo-wrap d-flex align-items-center justify-content-center mx-auto">
+                                    <svg width="22" height="19" viewBox="0 0 22 19" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g clip-path="url(#clip0_5201_9397)">
+                                            <path
+                                                d="M6.58881 18.4807C5.36168 18.4807 4.13455 18.4209 2.90742 18.4907C1.35633 18.5804 -0.243851 17.3844 0.0310261 15.1418C0.453159 11.7133 3.01541 9.29134 6.40229 9.1219C9.68118 8.96244 12.7539 11.6834 13.0877 15.0123C13.1761 15.9192 13.127 16.7664 12.5281 17.504C12.0176 18.1219 11.3697 18.4707 10.5745 18.4807C9.24923 18.4807 7.92393 18.4807 6.59863 18.4807H6.58881ZM6.53973 16.8761C7.83558 16.8761 9.12161 16.8761 10.4175 16.8761C11.1734 16.8761 11.6151 16.3777 11.5759 15.6003C11.5759 15.4508 11.5366 15.3013 11.5268 15.1518C11.2421 12.6003 8.9449 10.597 6.45137 10.7166C3.79095 10.8462 1.66066 12.979 1.59194 15.5704C1.5723 16.4375 1.9748 16.8761 2.81907 16.8761C4.06583 16.8761 5.30278 16.8761 6.54954 16.8761H6.53973Z"
+                                                fill="white" />
+                                            <path
+                                                d="M17.3889 18.4796C16.6821 18.4796 15.985 18.4796 15.2782 18.4796C14.6794 18.4796 14.3456 18.1906 14.3456 17.7022C14.3456 17.2338 14.7088 16.8949 15.2684 16.885C16.5446 16.875 17.8208 16.885 19.0971 16.885C20.0788 16.885 20.4911 16.4365 20.4322 15.4398C20.2456 12.3501 17.2514 10.1275 14.2867 10.875C14.0805 10.9248 13.8744 10.9846 13.6682 10.9946C13.2559 11.0245 12.9614 10.8451 12.873 10.4265C12.7749 9.99792 12.9221 9.61918 13.3344 9.50955C14.0118 9.33015 14.699 9.15075 15.396 9.13081C19.0185 9.04111 22.052 12.1308 22.0127 15.7986C21.9931 17.2836 20.8739 18.4398 19.4112 18.4697C18.7436 18.4796 18.0663 18.4697 17.3987 18.4697L17.3889 18.4796Z"
+                                                fill="white" />
+                                            <path
+                                                d="M15.439 0.5C17.481 0.5 19.1303 2.17442 19.1106 4.22757C19.091 6.2907 17.4712 7.91528 15.4489 7.91528C13.3971 7.91528 11.7871 6.27076 11.7969 4.17774C11.7871 2.13455 13.4069 0.5 15.439 0.5ZM15.4587 6.3206C16.6269 6.3206 17.5301 5.38372 17.5203 4.19767C17.5203 2.99169 16.5876 2.08472 15.39 2.09468C14.2315 2.10465 13.3382 3.0515 13.348 4.23754C13.348 5.40365 14.2904 6.3206 15.4489 6.31063L15.4587 6.3206Z"
+                                                fill="white" />
+                                            <path
+                                                d="M6.54837 7.91528C4.52606 7.90532 2.90625 6.25083 2.90625 4.20764C2.90625 2.14452 4.5457 0.5 6.59746 0.5C8.64922 0.5 10.2396 2.16445 10.2298 4.25748C10.2199 6.30066 8.5805 7.92525 6.54837 7.91528ZM6.55819 2.09468C5.38996 2.09468 4.48679 3.03156 4.48679 4.20764C4.48679 5.39369 5.39978 6.31063 6.56801 6.31063C7.75587 6.31063 8.66886 5.38372 8.65904 4.16777C8.65904 2.99169 7.72642 2.08472 6.55819 2.08472V2.09468Z"
+                                                fill="white" />
+                                        </g>
+                                        <defs>
+                                            <clipPath id="clip0_5201_9397">
+                                                <rect width="22" height="18" fill="white"
+                                                    transform="translate(0 0.5)" />
+                                            </clipPath>
+                                        </defs>
+                                    </svg>
+
+                                </div>
+                                <span class="d-block mx-auto text-white">Human</span>
+
+                                <div class="d-flex flex-sm-column flex-wrap gap-sm-0 gap-1 human-tab">
+                                    <button class="nav-link text-white px-sm-2 mb-3 active" type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/878ab287b670736089ec2ad0ea717eed/manifest/video.m3u8')">
+                                        English
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/035395847e74325f620a8eccd990a3cd/manifest/video.m3u8')">
+                                        Japanese
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/9393e58cbed2ad9735d4e66850452a3a/manifest/video.m3u8')">
+                                        Korean
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/0cea728ce638bfba931b4f310a69e96d/manifest/video.m3u8')">
+                                        Vietnamese
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/a7e27e6347e46d8b82c1e4cd46e4f30c/manifest/video.m3u8')">
+                                        Indonesian
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/f6e6b3119de13a4400753d928af6b24d/manifest/video.m3u8')">
+                                        Spanish
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/e4a71aae04fa62b5ccc95c296019417d/manifest/video.m3u8')">
+                                        Portuguese
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/e379e73f7a37c31bc9022e2219e47faf/manifest/video.m3u8')">
+                                        Arabic
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/755769edf95c57eaf6f46eddb842943d/manifest/video.m3u8')">
+                                        Russian
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/d50d391dcf6f87692c5de3c7226ef284/manifest/video.m3u8')">
+                                        French
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/7f6244d3616250ab074dc62632f6f7ea/manifest/video.m3u8')">
+                                        German
+                                    </button>
+                                    <button class="nav-link text-white px-sm-2 mb-3 " type="button"
+                                        onclick="videoPlay(this,'human','English','https://customer-y103wh2d9k09h4ie.cloudflarestream.com/fef8899b4db4914858810e44db87aed8/manifest/video.m3u8')">
+                                        Thai
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="tab-content d-sm-block d-flex justify-content-center" id="v-pills-tabContent">
+                                <div aria-labelledby="human-english-tab" class="tab-pane fader show active"
+                                    id="human-english" role="tabpanel">
+                                    <div class="mx-auto">
+                                        <video-js class="w-100 h-100 videoPlayer" id="video-human" controls
+                                            title="Speech To Text-EN (AI+Human Transcription)" width="100%">
+                                            <source id="videoSource-human" class="w-100"
+                                                src="https://customer-y103wh2d9k09h4ie.cloudflarestream.com/878ab287b670736089ec2ad0ea717eed/manifest/video.m3u8"
+                                                type="application/x-mpegURL" />
+                                        </video-js>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
+    <script>
+        // Initialize Video.js players
+        window.addEventListener("DOMContentLoaded", function () {
+            const players = {
+                ai: videojs(document.getElementById('video-ai'))
+            };
+
+            window.videoPlay = function (button, type, lng, link) {
+                const player = players[type];
+
+                // ✅ Remove 'active' from all buttons in the same container
+                const parentNav = button.closest('.nav');
+                parentNav.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
+
+                // ✅ Add 'active' class to the clicked button
+                button.classList.add('active');
+
+                // ✅ Load and play the new video
+                if (player) {
+                    player.src({ type: 'application/x-mpegURL', src: link });
+                    player.load();
+                    player.one('canplay', () => player.play());
+                }
+            };
+        });
+    </script>
+
+
+
+</body>
+
+</html>

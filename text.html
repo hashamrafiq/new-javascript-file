@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    .parent {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 70%;
+      margin: auto;
+      position: relative;
+    }
+
+    .child {
+      border: 1px solid #1d1d1d;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 20px;
+    }
+
+    .hover-effect {
+      background: red;
+      color: white;
+      border: red;
+    }
+
+    .dropdown {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #1d1d1d;
+      box-shadow: 0 0 2px #1d1d1d;
+      position: absolute;
+      left: 50%;
+      top: 70px;
+      transform: translate(-50%, 0);
+      display: none;
+    }
+
+    .show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="parent">
+    <div class="child">
+      prodcut
+      <div class="dropdown"></div>
+    </div>
+    <div class="child">
+      <div class="dropdown"></div>
+    </div>
+    <div class="child">
+      <div class="dropdown"></div>
+    </div>
+    <div class="child">
+      <div class="dropdown"></div>
+    </div>
+  </div>
+  <script>
+    let parentElement = document.querySelector(".parent");
+    let childElement = parentElement.querySelectorAll(".child");
+    // let dropdownMenu = childElement.children;
+    // childElement[0].style.backgroundColor = "red";
+    childElement.forEach(myFunction);
+    function myFunction(element) {
+      let dropdown = element.querySelector(".dropdown");
+      element.addEventListener("mouseover", function () {
+        dropdown.classList.add("show");
+      });
+      element.addEventListener("mouseout", function () {
+        dropdown.classList.remove("show");
+      })
+    }
+  </script>
+</body>
+
+</html>
